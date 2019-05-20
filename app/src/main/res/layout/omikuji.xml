@@ -10,5 +10,5 @@
     <Button
             android:text="@string/bt_action"
             android:layout_width="match_parent"
-            android:layout_height="127dp" android:id="@+id/button2"/>
+            android:layout_height="127dp" android:id="@+id/button" android:onClick="onButtonClick"/>
 </LinearLayout>
