@@ -1,40 +1,61 @@
 package jp.wings.nikkeibp.omikuji
 
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.v7.app.AppCompatActivity
+import android.view.MotionEvent
 import android.view.View
-import android.view.animation.Animation
-import android.view.animation.TranslateAnimation
-import kotlinx.android.synthetic.main.main.*
+import kotlinx.android.synthetic.main.fortune.*
 import kotlinx.android.synthetic.main.omikuji.*
-import java.util.*
 
 class OmikujiActivity : AppCompatActivity() {
+
+    var omikujiShelf = Array<OmikujiParts>(20){ OmikujiParts(R.drawable.homepage, R.string.contents1) }
+    var omikujiNumber = -1
+
+    val omikujiBox = OmikujiBox()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.omikuji)
 
-//        val rnd = Random()
-//        val number = rnd.nextInt(20)
-//
-//        val omikujiShelf = Array<String>(20, {"吉"})
-//        omikujiShelf[0] = "大吉"
-//        omikujiShelf[19] = "凶"
-//
-//        var text = omikujiShelf[number]
-//
-//        hello_view.text = text
+        omikujiBox.omikujiView = imageView
+
+        omikujiShelf[0].drawID = R.drawable.snoopy
+        omikujiShelf[0].fortuneID = R.string.contents2
+
+        omikujiShelf[1].drawID = R.drawable.ic_launcher_background
+        omikujiShelf[1].fortuneID = R.string.contents9
+
+        omikujiShelf[2].fortuneID = R.string.contents3
+        omikujiShelf[3].fortuneID = R.string.contents4
+        omikujiShelf[4].fortuneID = R.string.contents5
+        omikujiShelf[5].fortuneID = R.string.contents6
 
     }
 
+    override fun onTouchEvent(event: MotionEvent?): Boolean {
+        if(event?.action === MotionEvent.ACTION_DOWN) {
+            if(omikujiNumber < 0 && omikujiBox.finish) {
+                drawResult()
+            }
+        }
+        return super.onTouchEvent(event)
+    }
+
     fun onButtonClick(v: View) {
-//        imageView.setImageResource(R.drawable.homepage)
-        val translate = TranslateAnimation(0f, 0f, 0f, -200f)
-        translate.repeatMode = Animation.REVERSE
-        translate.repeatCount = 5
-        translate.duration = 100
-        imageView.startAnimation(translate)
+        omikujiBox.shake()
+
+    }
+
+    private fun drawResult() {
+        omikujiNumber = omikujiBox.number
+
+        val op = omikujiShelf[omikujiNumber]
+
+        setContentView(R.layout.fortune)
+
+        imageView2.setImageResource(op.drawID)
+        textView.setText(op.fortuneID)
     }
 
 }
